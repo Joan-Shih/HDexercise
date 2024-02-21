@@ -4,9 +4,9 @@ from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from jose import JWTError, jwt
-from . import schemas
-from .connection import connect_mysql
-from .config import settings
+import schemas
+from connection import connect_mysql
+from config import settings
 from icecream import ic
 
 SECRET_KEY = settings.secret_key

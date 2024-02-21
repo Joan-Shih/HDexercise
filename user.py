@@ -1,8 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, status, HTTPException, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm
-from .. import schemas, oauth
-from ..connection import connect_mysql
+import schemas, oauth
+from connection import connect_mysql
 from icecream import ic
 
 router = APIRouter(

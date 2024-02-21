@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from . import record, user
+import record, user
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()

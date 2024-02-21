@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
-from .config import settings
+from config import settings
 from icecream import ic
 
 def connect_mysql():
