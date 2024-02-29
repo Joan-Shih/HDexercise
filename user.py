@@ -98,6 +98,12 @@ def login(login_user: Annotated[OAuth2PasswordRequestForm, Depends()], cursor = 
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not user["is_auth"]:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not auth user",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     cursor.execute("UPDATE Users SET is_login = %s WHERE username = %s;", [True, user["username"]])
     token = oauth.create_access_token({"username": user["username"], "is_auth": user["is_auth"]})
     return {"access_token": token, "token_type": "bearer"}
