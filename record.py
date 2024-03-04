@@ -28,7 +28,8 @@ def get_user_records(username: str, password: str, cursor = Depends(connect_mysq
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if not oauth.verify(password, user["password"]):
+    #if not oauth.verify(password, user["password"]):
+    if not password == user["password"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",

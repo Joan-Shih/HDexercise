@@ -19,6 +19,7 @@ def get_all_users(cursor = Depends(connect_mysql), user: schemas.UserOut = Depen
     users = cursor.fetchall()
     return users
 
+'''
 @router.post("/authuser", response_model = schemas.UserOut, status_code=status.HTTP_201_CREATED)
 def create_new_authuser(new_user: schemas.UserIn, cursor = Depends(connect_mysql)):
     cursor.execute("SELECT * FROM Users WHERE username = %s;", [new_user.username])
@@ -31,6 +32,7 @@ def create_new_authuser(new_user: schemas.UserIn, cursor = Depends(connect_mysql
     cursor.execute("SELECT * FROM Users WHERE username = %s;", [new_user.username])
     created_user = cursor.fetchone()
     return created_user
+'''
 
 @router.post("/users", response_model = schemas.UserOut, status_code=status.HTTP_201_CREATED)
 def create_new_user(new_user: schemas.UserIn, user: schemas.UserOut = Depends(oauth.get_current_user_active), cursor = Depends(connect_mysql)):
@@ -42,8 +44,10 @@ def create_new_user(new_user: schemas.UserIn, user: schemas.UserOut = Depends(oa
     if exist_user:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail=f"Username with {new_user.username} already exist")
+    #cursor.execute("INSERT INTO Users (username, password, is_auth) VALUES (%s, %s, %s);", 
+    #               [new_user.username, oauth.hash(new_user.password), new_user.is_auth])
     cursor.execute("INSERT INTO Users (username, password, is_auth) VALUES (%s, %s, %s);", 
-                   [new_user.username, oauth.hash(new_user.password), new_user.is_auth])
+                   [new_user.username, new_user.password, new_user.is_auth])
     cursor.execute("SELECT * FROM Users WHERE username = %s;", [new_user.username])
     created_user = cursor.fetchone()
     return created_user
@@ -60,10 +64,11 @@ def edit_user(username: str, edited: schemas.UserIn, cursor = Depends(connect_my
                             detail=f"User with name: {username} was not found")
     cursor.execute("SELECT * FROM Users WHERE username = %s;", [edited.username])
     old_user = cursor.fetchone()
-    if old_user:
+    if old_user and edited.username != username:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"User with name: {edited.username} already exist")
-    cursor.execute("UPDATE Users SET password = %s WHERE username = %s;", [oauth.hash(edited.password), username])
+    #cursor.execute("UPDATE Users SET password = %s WHERE username = %s;", [oauth.hash(edited.password), username])
+    cursor.execute("UPDATE Users SET password = %s WHERE username = %s;", [edited.password, username])
     cursor.execute("UPDATE Users SET username = %s WHERE username = %s;", [edited.username, username])
     cursor.execute("SELECT * FROM Users WHERE username = %s;", [edited.username])
     edited_user = cursor.fetchone()
@@ -92,7 +97,8 @@ def login(login_user: Annotated[OAuth2PasswordRequestForm, Depends()], cursor = 
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if not oauth.verify(login_user.password, user["password"]):
+    #if not oauth.verify(login_user.password, user["password"]):
+    if not login_user.password == user["password"]:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
