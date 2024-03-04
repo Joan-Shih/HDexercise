@@ -26,5 +26,6 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-class TokenData(UserOut):
-    pass
+class TokenData(BaseModel):
+    username: str
+    is_auth: Union[bool, int]
