@@ -6,7 +6,7 @@ app = FastAPI()
 
 origins = [
 #    "http://localhost:3000"
-    "*",
+#    "*",
     "https://hd-exercise-auth.vercel.app/"
 ]
 
