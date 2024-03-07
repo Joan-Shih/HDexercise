@@ -56,8 +56,8 @@ def get_current_user_active(token: Annotated[str, Depends(oauth2_scheme)], curso
     user = cursor.fetchone()
     if not user:
         raise credentials_exception
-    if not user["is_login"]:
-        raise credentials_exception
+    #if not user["is_login"]:
+    #    raise credentials_exception
     active_user = schemas.UserOut(**user)
     return active_user
 

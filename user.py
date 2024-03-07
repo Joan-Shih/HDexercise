@@ -114,7 +114,9 @@ def login(login_user: Annotated[OAuth2PasswordRequestForm, Depends()], cursor = 
     token = oauth.create_access_token({"username": user["username"], "is_auth": user["is_auth"]})
     return {"access_token": token, "token_type": "bearer"}
 
+"""
 @router.put("/logout", status_code=status.HTTP_204_NO_CONTENT)
 def logout(cursor = Depends(connect_mysql), user: schemas.UserOut = Depends(oauth.get_current_user_active)):
     cursor.execute("UPDATE Users SET is_login = %s WHERE username = %s;", [False, user.username])
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+"""
