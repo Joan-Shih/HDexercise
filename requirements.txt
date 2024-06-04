@@ -23,6 +23,7 @@ pydantic==2.5.1
 pydantic-settings==2.1.0
 pydantic_core==2.14.3
 Pygments==2.17.2
+PyMySQL==1.1.1
 python-dotenv==1.0.0
 python-jose==3.3.0
 python-multipart==0.0.6
