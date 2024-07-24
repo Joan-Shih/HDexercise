@@ -15,12 +15,12 @@ class RecordOut(BaseModel):
     record_id: int
     username: str
     create_date: str
-    exercise: int
+    exercise: float
 
 class RecordIn(BaseModel):
     username: str
     create_date: str
-    exercise: int
+    exercise: float
 
 class Token(BaseModel):
     access_token: str
